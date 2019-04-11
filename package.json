@@ -1,0 +1,22 @@
+{
+  "name": "graphql-shop",
+  "version": "1.0.0",
+  "description": "A graphql demo shop which works with the SW6 GraphQL plugin",
+  "author": "Jannis Leifeld",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/apollo": "^4.0.0-rc4",
+    "cross-env": "^5.2.0",
+    "graphql-tag": "^2.10.1",
+    "nuxt": "^2.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}
