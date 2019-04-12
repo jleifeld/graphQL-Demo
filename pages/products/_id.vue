@@ -7,12 +7,15 @@
             <p>
                 Preis: <strong>{{ product.price.net }}</strong>
             </p>
+            <label for="quantity"></label>
+            <input v-model="quantity" id="quantity" type="number">
+            <button @click="addToCart">Buy,buy,buy</button>
         </div>
     </section>
 </template>
 
 <script>
-    import gql from 'graphql-tag'
+    import gql from 'graphql-tag';
 
     export default {
 
@@ -42,7 +45,7 @@
                 // Reactive parameters
                 variables() {
                     return {
-                        productId: this.routeId
+                        productId: this.productId
                     }
                 }
             }
@@ -50,8 +53,45 @@
 
         data(){
             return {
-                routeId: this.$route.params.id,
-                product: {}
+                productId: this.$route.params.id,
+                product: {},
+                quantity: 1
+            }
+        },
+
+        methods: {
+            addToCart() {
+                this.$apollo.mutate({
+                    // Query
+                    mutation: gql`mutation ($productId: ID!, $quantity: Int!) {
+                        addToCart(productId: $productId, quantity: $quantity) {
+                            name,
+                            price {
+                                totalPrice
+                            },
+                            lineItems {
+                                key,
+                                quantity,
+                                label,
+                                cover {
+                                    url
+                                },
+                                price {
+                                    totalPrice
+                                }
+                            }
+                        }
+                      }`,
+                    // Parameters
+                    variables: {
+                        productId: this.productId,
+                        quantity: this.quantity
+                    }
+                }).then((res) => {
+                    // Result
+                    this.$store.commit('updateCart', res.data.addToCart);
+
+                })
             }
         }
     }

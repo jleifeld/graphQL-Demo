@@ -1,7 +1,7 @@
 import pkg from './package'
 
 export default {
-  mode: 'universal',
+  mode: 'spa',
 
   /*
   ** Headers of the page
@@ -29,8 +29,7 @@ export default {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: [
-  ],
+  plugins: [],
 
   /*
   ** Nuxt.js modules
@@ -45,7 +44,14 @@ export default {
   apollo: {
     clientConfigs: {
       default: {
-        httpEndpoint: 'http://shopware.test/graphql'
+        httpEndpoint: 'http://shopware.test/storefront-api/v1/graphql',
+        httpLinkOptions: {
+          headers: {
+            "x-sw-context-token": "6cef9552e22b4e9ba805bece74a508da",
+            "x-sw-access-key": "SWSCVXVJDFRHCLRMA0Z0N1DPCW",
+            "x-sw-language-id": "2fbb5fe2e29a4d70aa5854ce7ce3e20b"
+          }
+        }
       }
     }
   },
