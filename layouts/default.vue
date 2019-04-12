@@ -18,10 +18,12 @@
         <li v-for="item in cart.lineItems">
           <strong>{{ item.label }}</strong>
           <br>
-          Anzahl: {{ item.quantity }}
+          Anzahl: <input type="text" :value="item.quantity" @input="updatePrice(item, $event)">
           <br>
-          Preis: {{ item.price.totalPrice }}€
+          Preis:
+          {{ item.price.totalPrice }}€
           <br>
+          <button @click="removeFromCart(item.key)">Entfernen</button>
           -------
         </li>
       </ul>
@@ -77,6 +79,77 @@
         }).then((res) => {
           this.$store.commit('updateCart', res.data.getCart);
         })
+      },
+
+      removeFromCart(itemId) {
+        this.$apollo.mutate({
+          // Query
+          mutation: gql`mutation ($itemId: ID!) {
+                        removeLineItem(key: $itemId) {
+                            name,
+                            price {
+                                totalPrice
+                            },
+                            lineItems {
+                                key,
+                                quantity,
+                                label,
+                                cover {
+                                    url
+                                },
+                                price {
+                                    totalPrice
+                                }
+                            }
+                        }
+                      }`,
+          // Parameters
+          variables: {
+            itemId: itemId
+          }
+        }).then((res) => {
+          // Result
+          this.$store.commit('updateCart', res.data.removeLineItem);
+
+        })
+      },
+
+      updatePrice(item, event) {
+        if (event.data <= 0) {
+          this.removeFromCart(item.key);
+          return;
+        }
+          this.$apollo.mutate({
+              // Query
+              mutation: gql`mutation ($itemId: ID!, $quantity: Int) {
+                              updateLineItem(key: $itemId, quantity: $quantity) {
+                                name,
+                                price {
+                                    totalPrice
+                                },
+                                lineItems {
+                                    key,
+                                    quantity,
+                                    label,
+                                    cover {
+                                        url
+                                    },
+                                    price {
+                                        totalPrice
+                                    }
+                                }
+                              }
+                            }`,
+              // Parameters
+              variables: {
+                  itemId: item.key,
+                  quantity: event.data
+              }
+          }).then((res) => {
+              // Result
+              this.$store.commit('updateCart', res.data.updateLineItem);
+
+          })
       }
     }
   }

@@ -5,7 +5,7 @@
             <img :src="product.media.edges[0].node.media.url" alt="">
             <p>{{ product.description }}</p>
             <p>
-                Preis: <strong>{{ product.price.net }}</strong>
+                Preis: <strong>{{ product.price.gross }}</strong>
             </p>
             <label for="quantity"></label>
             <input v-model="quantity" id="quantity" type="number">

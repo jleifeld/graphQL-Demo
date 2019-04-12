@@ -9,6 +9,10 @@
                 Your order id is: "{{ orderId }}". <br>
                 <button @click="payHandler">Pay order</button>
             </p>
+
+            <p v-if="response">
+                {{ response }}
+            </p>
         </div>
     </section>
 </template>
@@ -21,7 +25,8 @@
         data(){
             return {
                 orderId: '',
-                finishUrl: 'https://www.google.com/search?biw=1680&bih=916&tbm=isch&sa=1&ei=mD-wXOWxE4idkgXxoq2ICQ&q=cats&oq=cats&gs_l=img.3..0i67j0l4j0i67j0l3j0i67.594.594..943...0.0..0.49.49.1......0....1..gws-wiz-img.V5QdH6Fe3i0'
+                finishUrl: 'https://www.google.com/search?biw=1680&bih=916&tbm=isch&sa=1&ei=mD-wXOWxE4idkgXxoq2ICQ&q=cats&oq=cats&gs_l=img.3..0i67j0l4j0i67j0l3j0i67.594.594..943...0.0..0.49.49.1......0....1..gws-wiz-img.V5QdH6Fe3i0',
+                response: ''
             }
         },
 
@@ -57,7 +62,7 @@
                         finishUrl: this.finishUrl
                     }
                 }).then((res) => {
-                    console.log(res)
+                    this.response = res;
                 })
             }
         }
